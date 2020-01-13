@@ -4,7 +4,7 @@ DEFAULT_OUTPUT = "."
 DEFAULT_DOC_NAME = "/documents.txt"
 
 # Luigi Configuration Values
-NAMESPACE = 'rubrikloud'
+NAMESPACE = 'rubikloud'
 
 # Document Configuration Values
 DELIMITER = ","
