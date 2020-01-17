@@ -9,4 +9,5 @@ NAMESPACE = 'rubrikloud'
 # Document Configuration Values
 DELIMITER = ","
 DOC_DELIMITER = "%"
-ALLOWED_CHARACTERS = '[^a-zA-Z0-9% \\n]+'
+ALLOWED_CHARACTERS = '[^a-zA-Z% \\n]+'
+# Should numbers be allowed?

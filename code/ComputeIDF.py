@@ -1,3 +1,4 @@
+import collections
 import math
 
 import luigi
@@ -22,7 +23,7 @@ class ComputeIDF(luigi.Task):
         return luigi.LocalTarget('{}/document_idf.txt'.format(self.doc_path))
 
     def run(self):
-        term_count_dict = {}
+        term_count_dict = collections.Counter()
         doc_count = 0
         with self.input().open('r') as in_file:
             for line in in_file:
@@ -30,7 +31,7 @@ class ComputeIDF(luigi.Task):
                     doc_count += 1
                 else:
                     term, _ = line.split(DELIMITER)
-                    term_count_dict[term] = term_count_dict.get(term, 0) + 1
+                    term_count_dict[term] = term_count_dict.get(term) + 1
 
         tf_dict = {term: math.log(doc_count / term_count) for term, term_count in term_count_dict.items()}
 

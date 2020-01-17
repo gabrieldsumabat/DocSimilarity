@@ -4,6 +4,8 @@ import luigi
 
 from code.Config import NAMESPACE, ALLOWED_CHARACTERS, DEFAULT_PATH, DEFAULT_DOC_NAME
 
+regex = re.compile(ALLOWED_CHARACTERS)
+
 
 def clean_text(text):
     """
@@ -11,7 +13,6 @@ def clean_text(text):
     :param text: string
     :return: string
     """
-    regex = re.compile(ALLOWED_CHARACTERS)
     return regex.sub('', text)
 
 
@@ -20,7 +21,7 @@ class CleanText(luigi.Task):
     Cleans the input text of any unwanted characters and normalizes all characters to lowercase
     """
     doc_path = luigi.Parameter(default=DEFAULT_PATH)
-    input_path = luigi.Parameter(default=DEFAULT_PATH + DEFAULT_DOC_NAME)
+    input_path = luigi.Parameter(default='/'.join([DEFAULT_PATH, DEFAULT_DOC_NAME]))
 
     task_namespace = NAMESPACE
 
@@ -28,13 +29,12 @@ class CleanText(luigi.Task):
         return luigi.LocalTarget('{}/document_cleaned.txt'.format(self.doc_path))
 
     def run(self):
-        out_file = self.output().open('w')
-        with open(str(self.input_path), 'r') as file:
-            for line in file:
-                cleaned_line = clean_text(line)
-                cleaned_lowercase_line = cleaned_line.lower()
-                out_file.write(cleaned_lowercase_line)
-        out_file.close()
+        with open(str(self.output().open('w')))as out_file:
+            with open(str(self.input_path), 'r') as in_file:
+                for line in in_file:
+                    cleaned_line = clean_text(line)
+                    cleaned_lowercase_line = cleaned_line.lower()
+                    out_file.write(cleaned_lowercase_line)
 
 
 if __name__ == '__main__':
